@@ -131,6 +131,8 @@ gml2step convert INPUT_GML OUTPUT_STEP [OPTIONS]
 | `--method` | `solid` | 変換方式: `solid`, `sew`, `extrude`, `auto` |
 | `--debug` | False | デバッグログ出力 |
 | `--use-streaming / --no-use-streaming` | True | ストリーミングパーサーを使う |
+| `--building-id ID` | なし | 特定の建物IDでフィルタ（複数回指定可） |
+| `--filter-attribute` | `gml:id` | 建物IDフィルタでマッチする属性 |
 
 ### `gml2step parse`
 

@@ -131,6 +131,8 @@ gml2step convert INPUT_GML OUTPUT_STEP [OPTIONS]
 | `--method` | `solid` | Conversion method: `solid`, `sew`, `extrude`, `auto` |
 | `--debug` | False | Enable debug logging |
 | `--use-streaming / --no-use-streaming` | True | Use streaming parser for lower memory usage |
+| `--building-id ID` | None | Filter by specific building ID(s). Can be used multiple times |
+| `--filter-attribute` | `gml:id` | Attribute to match for building ID filtering |
 
 ### `gml2step parse`
 

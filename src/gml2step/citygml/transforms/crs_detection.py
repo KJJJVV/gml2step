@@ -11,11 +11,14 @@ import xml.etree.ElementTree as ET
 try:
     from ...coordinate_utils import detect_epsg_from_srs
 except ImportError:
+
     def detect_epsg_from_srs(_: str):
         return None
 
 
-def detect_source_crs(root: ET.Element) -> Tuple[Optional[str], Optional[float], Optional[float]]:
+def detect_source_crs(
+    root: ET.Element,
+) -> Tuple[Optional[str], Optional[float], Optional[float]]:
     """
     Scan XML for srsName attributes and detect EPSG code plus sample coordinates.
 
@@ -61,22 +64,46 @@ def detect_source_crs(root: ET.Element) -> Tuple[Optional[str], Optional[float],
         if srs and not epsg_code:
             epsg_code = detect_epsg_from_srs(srs)
 
-        # Try to get sample coordinates from first posList
-        if sample_lat is None and e.tag.endswith("posList"):
-            txt = (e.text or "").strip()
-            if txt:
-                parts = txt.split()
-                try:
-                    if len(parts) >= 2:
-                        sample_lat = float(parts[0])
-                        sample_lon = float(parts[1])
+        # Try to get sample coordinates from coordinate-bearing elements
+        # Priority: posList > pos > lowerCorner > upperCorner
+        if sample_lat is None:
+            tag = e.tag
+            is_coord_tag = (
+                tag.endswith("posList")
+                or tag.endswith("}pos")
+                or tag == "pos"
+                or tag.endswith("lowerCorner")
+                or tag.endswith("upperCorner")
+            )
+            if is_coord_tag:
+                txt = (e.text or "").strip()
+                if txt:
+                    parts = txt.split()
+                    try:
+                        if len(parts) >= 2:
+                            lat_candidate = float(parts[0])
+                            lon_candidate = float(parts[1])
 
-                        # Sanity check for Japan area (lat: 20-50, lon: 120-155)
-                        if not (20 <= sample_lat <= 50 and 120 <= sample_lon <= 155):
-                            # Maybe lon/lat order - swap
-                            sample_lat, sample_lon = sample_lon, sample_lat
-                except ValueError:
-                    pass
+                            # Sanity check for Japan area (lat: 20-50, lon: 120-155)
+                            if (
+                                20 <= lat_candidate <= 50
+                                and 120 <= lon_candidate <= 155
+                            ):
+                                sample_lat = lat_candidate
+                                sample_lon = lon_candidate
+                            elif (
+                                20 <= lon_candidate <= 50
+                                and 120 <= lat_candidate <= 155
+                            ):
+                                # lon/lat order - swap
+                                sample_lat = lon_candidate
+                                sample_lon = lat_candidate
+                            else:
+                                # Not geographic coordinates (projected CRS) - still useful
+                                sample_lat = lat_candidate
+                                sample_lon = lon_candidate
+                    except ValueError:
+                        pass
 
         # Stop if both CRS and coordinates found
         if epsg_code and sample_lat is not None:
