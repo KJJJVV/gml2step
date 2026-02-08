@@ -338,3 +338,4 @@ gml2step was originally developed as part of [Paper-CAD](https://github.com/Soyn
 - [PLATEAU](https://www.mlit.go.jp/plateau/) — Japan's national 3D city model project (MLIT)
 - [OpenCASCADE](https://www.opencascade.com/) / [pythonocc-core](https://github.com/tpaviot/pythonocc-core) — 3D CAD kernel for STEP conversion
 - [pyproj](https://pyproj4.github.io/pyproj/) — Coordinate reference system transformations
+- [Mitou Junior](https://jr.mitou.org/) — A program supporting creators aged 17 and under with original ideas and outstanding technical skills
