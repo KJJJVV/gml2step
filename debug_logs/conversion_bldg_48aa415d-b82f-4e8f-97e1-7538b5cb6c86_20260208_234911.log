@@ -1,0 +1,403 @@
+================================================================================
+CITYGML TO STEP CONVERSION LOG
+================================================================================
+Building ID: bldg_48aa415d-b82f-4e8f-97e1-7538b5cb6c86
+Timestamp: 2026-02-08T23:49:11.387866
+Precision mode: standard
+Shape fix level: minimal
+Debug mode: Always enabled for detailed diagnostics
+================================================================================
+
+LOG LEGEND (for AI/LLM Analysis and Debugging):
+--------------------------------------------------------------------------------
+  [PHASE:N]       = Major processing phase (1-7)
+  ✓ SUCCESS       = Operation completed successfully
+  ✗ FAILED        = Operation failed
+  ⚠ WARNING       = Potential issue detected
+--------------------------------------------------------------------------------
+
+PROCESSING PHASES:
+  [PHASE:1] LOD Strategy Selection (LOD3→LOD2→LOD1 fallback)
+  [PHASE:2] Geometry Extraction
+  [PHASE:3] Shell Construction
+  [PHASE:4] Solid Validation
+  [PHASE:5] Automatic Repair
+  [PHASE:6] BuildingPart Merging
+  [PHASE:7] STEP Export
+================================================================================
+
+
+================================================================================
+[PHASE:1.5] COORDINATE SYSTEM DETECTION
+================================================================================
+
+[CRS] Setting up coordinate transformation:
+  - From: EPSG:6697
+  - To: EPSG:6677
+  - ✓ Transformation setup successful
+
+================================================================================
+[PHASE:0] PRE-SCAN FOR COORDINATE RE-CENTERING
+================================================================================
+[PRESCAN] Scanned 2080 coordinates from 5 buildings
+[PRESCAN] ✓ Applied xyz_transform to get planar coordinates
+[PRESCAN] Bounding box center: (-5575.675, -35500.705, 18.955) meters
+[PRESCAN] Distance from origin: 35935.895 m (35.936 km)
+[PRESCAN] ✓ Offset calculated: (5575.675, 35500.705, -18.955) meters
+[PRESCAN] This will re-center geometry to origin for numerical precision
+[PRESCAN] ✓ Wrapped xyz_transform with offset
+
+================================================================================
+[PHASE:2] BUILDING GEOMETRY EXTRACTION (Solid Method)
+================================================================================
+[INFO] Total buildings to process: 5
+[INFO] Limit: 5
+[INFO] BuildingPart merging: enabled
+
+
+────────────────────────────────────────────────────────────────────────────────
+[BUILDING 1/5] Processing: bldg_48aa415d-b82f-4e8f-97e1-7538b5cb6c86
+[CONVERSION DEBUG] LOD3 Strategy 1: lod3Solid not found
+[CONVERSION DEBUG] Falling back to LOD2 (PLATEAU's most common LOD)
+[CONVERSION DEBUG] Trying LOD2 Strategy 1: lod2Solid
+[CONVERSION DEBUG]   ✓ Found bldg:lod2Solid//gml:Solid
+[CONVERSION DEBUG]   Extracted 18 exterior faces, 0 interior shells
+[CONVERSION DEBUG]   Checking if boundedBy has more detailed geometry...
+[CONVERSION DEBUG]   Found 10 boundedBy faces
+[CONVERSION DEBUG]   Comparing lod2Solid (18 faces) vs boundedBy (10 faces)...
+[CONVERSION DEBUG]   → lod2Solid has more detail (18 vs 10 faces), using it
+
+[PHASE:4] SOLID VALIDATION
+[VALIDATION] ✓ Initial solid validation succeeded
+└─ [RESULT] ✓ Successfully added (total: 1)
+
+────────────────────────────────────────────────────────────────────────────────
+[BUILDING 2/5] Processing: bldg_0e606971-3756-4f7a-aff3-ed9504947830
+[CONVERSION DEBUG] LOD3 Strategy 1: lod3Solid not found
+[CONVERSION DEBUG] Falling back to LOD2 (PLATEAU's most common LOD)
+[CONVERSION DEBUG] Trying LOD2 Strategy 1: lod2Solid
+[CONVERSION DEBUG]   ✓ Found bldg:lod2Solid//gml:Solid
+[CONVERSION DEBUG]   Extracted 24 exterior faces, 0 interior shells
+[CONVERSION DEBUG]   Checking if boundedBy has more detailed geometry...
+[CONVERSION DEBUG]   Found 12 boundedBy faces
+[CONVERSION DEBUG]   Comparing lod2Solid (24 faces) vs boundedBy (12 faces)...
+[CONVERSION DEBUG]   → lod2Solid has more detail (24 vs 12 faces), using it
+
+[PHASE:4] SOLID VALIDATION
+[VALIDATION] ✗ Initial solid validation failed
+
+[PHASE:5] AUTOMATIC REPAIR WITH AUTO-ESCALATION
+[INFO] Auto-escalation enabled: will try levels minimal → standard → aggressive → ultra
+[INFO] Starting from: minimal
+
+
+[REPAIR LEVEL: MINIMAL]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+[STEP 2/4] Skipped (requires level standard+)
+[STEP 3/4] Skipped (requires level aggressive+)
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: MINIMAL] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: standard
+================================================================================
+
+[REPAIR LEVEL: STANDARD]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+[STEP 3/4] Skipped (requires level aggressive+)
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: STANDARD] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: aggressive
+================================================================================
+
+[REPAIR LEVEL: AGGRESSIVE]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+
+[STEP 3/4] Trying rebuild with relaxed tolerance (2x)...
+[INFO] Original tolerance: 0.002263
+[INFO] Relaxed tolerance: 0.004526
+[REPAIR] ✗ Relaxed tolerance rebuild did not create valid solid
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: AGGRESSIVE] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: ultra
+================================================================================
+
+[REPAIR LEVEL: ULTRA]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+
+[STEP 3/4] Trying rebuild with relaxed tolerance (2x)...
+[INFO] Original tolerance: 0.002263
+[INFO] Relaxed tolerance: 0.004526
+[REPAIR] ✗ Relaxed tolerance rebuild did not create valid solid
+
+[STEP 4/4] Trying ShapeFix_Shape (most aggressive)...
+[REPAIR] ✗ ShapeFix_Shape did not create valid solid
+
+[REPAIR LEVEL: ULTRA] ✗ All strategies failed at this level
+
+================================================================================
+[REPAIR] ✗ All repair attempts exhausted across all escalation levels
+[INFO] Tried levels: minimal → standard → aggressive → ultra
+[DECISION] → Returning shell instead of solid (may cause issues in merging/export)
+⚠ WARNING: This shape may fail in BuildingPart fusion or STEP export
+⚠ WARNING: The building geometry has fundamental topology issues
+└─ [RESULT] ⚠ Added invalid shape (will attempt export)
+
+────────────────────────────────────────────────────────────────────────────────
+[BUILDING 3/5] Processing: bldg_a2cb7753-a45c-417f-9c16-812513dc4882
+[CONVERSION DEBUG] LOD3 Strategy 1: lod3Solid not found
+[CONVERSION DEBUG] Falling back to LOD2 (PLATEAU's most common LOD)
+[CONVERSION DEBUG] Trying LOD2 Strategy 1: lod2Solid
+[CONVERSION DEBUG]   ✓ Found bldg:lod2Solid//gml:Solid
+[CONVERSION DEBUG]   Extracted 278 exterior faces, 0 interior shells
+[CONVERSION DEBUG]   Checking if boundedBy has more detailed geometry...
+[CONVERSION DEBUG]   Found 156 boundedBy faces
+[CONVERSION DEBUG]   Comparing lod2Solid (278 faces) vs boundedBy (156 faces)...
+[CONVERSION DEBUG]   → lod2Solid has more detail (278 vs 156 faces), using it
+
+[PHASE:4] SOLID VALIDATION
+[VALIDATION] ✗ Initial solid validation failed
+
+[PHASE:5] AUTOMATIC REPAIR WITH AUTO-ESCALATION
+[INFO] Auto-escalation enabled: will try levels minimal → standard → aggressive → ultra
+[INFO] Starting from: minimal
+
+
+[REPAIR LEVEL: MINIMAL]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+[STEP 2/4] Skipped (requires level standard+)
+[STEP 3/4] Skipped (requires level aggressive+)
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: MINIMAL] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: standard
+================================================================================
+
+[REPAIR LEVEL: STANDARD]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+[STEP 3/4] Skipped (requires level aggressive+)
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: STANDARD] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: aggressive
+================================================================================
+
+[REPAIR LEVEL: AGGRESSIVE]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+
+[STEP 3/4] Trying rebuild with relaxed tolerance (2x)...
+[INFO] Original tolerance: 0.005291
+[INFO] Relaxed tolerance: 0.010582
+[REPAIR] ✗ Relaxed tolerance rebuild did not create valid solid
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: AGGRESSIVE] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: ultra
+================================================================================
+
+[REPAIR LEVEL: ULTRA]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+
+[STEP 3/4] Trying rebuild with relaxed tolerance (2x)...
+[INFO] Original tolerance: 0.005291
+[INFO] Relaxed tolerance: 0.010582
+[REPAIR] ✗ Relaxed tolerance rebuild did not create valid solid
+
+[STEP 4/4] Trying ShapeFix_Shape (most aggressive)...
+[REPAIR] ✗ ShapeFix_Shape did not create valid solid
+
+[REPAIR LEVEL: ULTRA] ✗ All strategies failed at this level
+
+================================================================================
+[REPAIR] ✗ All repair attempts exhausted across all escalation levels
+[INFO] Tried levels: minimal → standard → aggressive → ultra
+[DECISION] → Returning shell instead of solid (may cause issues in merging/export)
+⚠ WARNING: This shape may fail in BuildingPart fusion or STEP export
+⚠ WARNING: The building geometry has fundamental topology issues
+└─ [RESULT] ⚠ Added invalid shape (will attempt export)
+
+────────────────────────────────────────────────────────────────────────────────
+[BUILDING 4/5] Processing: bldg_5acb83dc-b2db-44ab-8a6e-ee42fafa51f0
+[CONVERSION DEBUG] LOD3 Strategy 1: lod3Solid not found
+[CONVERSION DEBUG] Falling back to LOD2 (PLATEAU's most common LOD)
+[CONVERSION DEBUG] Trying LOD2 Strategy 1: lod2Solid
+[CONVERSION DEBUG]   ✓ Found bldg:lod2Solid//gml:Solid
+[CONVERSION DEBUG]   Extracted 6 exterior faces, 0 interior shells
+[CONVERSION DEBUG]   Checking if boundedBy has more detailed geometry...
+[CONVERSION DEBUG]   Found 6 boundedBy faces
+[CONVERSION DEBUG]   Comparing lod2Solid (6 faces) vs boundedBy (6 faces)...
+[CONVERSION DEBUG]   ✓ boundedBy has 6 vs lod2Solid's 6 faces
+[CONVERSION DEBUG]   → Preferring boundedBy strategy for more detailed geometry
+[CONVERSION DEBUG]   → Skipping MultiSurface/Geometry strategies, jumping to boundedBy
+[CONVERSION DEBUG] Trying LOD2 Strategy 4: boundedBy surfaces
+[CONVERSION DEBUG]   ✓ LOD2 Strategy 4 extracted 12 faces from boundedBy
+└─ [RESULT] ✓ Successfully added (total: 4)
+
+────────────────────────────────────────────────────────────────────────────────
+[BUILDING 5/5] Processing: bldg_7448a050-4729-488a-8bc9-ccf5187bdeb4
+[CONVERSION DEBUG] LOD3 Strategy 1: lod3Solid not found
+[CONVERSION DEBUG] Falling back to LOD2 (PLATEAU's most common LOD)
+[CONVERSION DEBUG] Trying LOD2 Strategy 1: lod2Solid
+[CONVERSION DEBUG]   ✓ Found bldg:lod2Solid//gml:Solid
+[CONVERSION DEBUG]   Extracted 47 exterior faces, 0 interior shells
+[CONVERSION DEBUG]   Checking if boundedBy has more detailed geometry...
+[CONVERSION DEBUG]   Found 23 boundedBy faces
+[CONVERSION DEBUG]   Comparing lod2Solid (47 faces) vs boundedBy (23 faces)...
+[CONVERSION DEBUG]   → lod2Solid has more detail (47 vs 23 faces), using it
+
+[PHASE:4] SOLID VALIDATION
+[VALIDATION] ✗ Initial solid validation failed
+
+[PHASE:5] AUTOMATIC REPAIR WITH AUTO-ESCALATION
+[INFO] Auto-escalation enabled: will try levels minimal → standard → aggressive → ultra
+[INFO] Starting from: minimal
+
+
+[REPAIR LEVEL: MINIMAL]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+[STEP 2/4] Skipped (requires level standard+)
+[STEP 3/4] Skipped (requires level aggressive+)
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: MINIMAL] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: standard
+================================================================================
+
+[REPAIR LEVEL: STANDARD]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+[STEP 3/4] Skipped (requires level aggressive+)
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: STANDARD] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: aggressive
+================================================================================
+
+[REPAIR LEVEL: AGGRESSIVE]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+
+[STEP 3/4] Trying rebuild with relaxed tolerance (2x)...
+[INFO] Original tolerance: 0.001960
+[INFO] Relaxed tolerance: 0.003921
+[REPAIR] ✗ Relaxed tolerance rebuild did not create valid solid
+[STEP 4/4] Skipped (requires level ultra)
+
+[REPAIR LEVEL: AGGRESSIVE] ✗ All strategies failed at this level
+
+================================================================================
+[ESCALATION] Previous level failed, escalating to: ultra
+================================================================================
+
+[REPAIR LEVEL: ULTRA]
+
+[STEP 1/4] Trying ShapeFix_Solid...
+[REPAIR] ✗ ShapeFix_Solid did not fix all issues
+
+[STEP 2/4] Trying ShapeUpgrade_UnifySameDomain (topology simplification)...
+[REPAIR] ✗ Topology simplification did not create valid solid
+
+[STEP 3/4] Trying rebuild with relaxed tolerance (2x)...
+[INFO] Original tolerance: 0.001960
+[INFO] Relaxed tolerance: 0.003921
+[REPAIR] ✗ Relaxed tolerance rebuild did not create valid solid
+
+[STEP 4/4] Trying ShapeFix_Shape (most aggressive)...
+[REPAIR] ✗ ShapeFix_Shape did not create valid solid
+
+[REPAIR LEVEL: ULTRA] ✗ All strategies failed at this level
+
+================================================================================
+[REPAIR] ✗ All repair attempts exhausted across all escalation levels
+[INFO] Tried levels: minimal → standard → aggressive → ultra
+[DECISION] → Returning shell instead of solid (may cause issues in merging/export)
+⚠ WARNING: This shape may fail in BuildingPart fusion or STEP export
+⚠ WARNING: The building geometry has fundamental topology issues
+└─ [RESULT] ⚠ Added invalid shape (will attempt export)
+
+================================================================================
+[PHASE:2] EXTRACTION SUMMARY (Solid Method)
+================================================================================
+[INFO] Shapes extracted: 5
+
+
+================================================================================
+[PHASE:7] STEP EXPORT PREPARATION
+================================================================================
+[INFO] Total shapes extracted: 5
+
+[VALIDATION] Pre-export shape validation:
+  ✓ Valid shapes: 2
+  ⚠ Invalid shapes: 3
+
+[INFO] Proceeding to STEP export with 5 shape(s)...
+[INFO] Target file: /var/folders/bb/6dpdt_x9047d6_68y3pmbdc00000gn/T/gml2step_e2e_cjnxdiyc/tokyo_station_5bldg.step
+[STEP EXPORT] Using local STEP writer...
+[STEP EXPORT] Configuration: AP214CD schema, MM units, 1e-6 precision
+[STEP EXPORT] Transferring geometry to STEP format...
+[STEP EXPORT] ✓ Transfer successful
+[STEP EXPORT] Writing to file: /var/folders/bb/6dpdt_x9047d6_68y3pmbdc00000gn/T/gml2step_e2e_cjnxdiyc/tokyo_station_5bldg.step
+[STEP EXPORT] ✓ File written successfully
+  - File: /var/folders/bb/6dpdt_x9047d6_68y3pmbdc00000gn/T/gml2step_e2e_cjnxdiyc/tokyo_station_5bldg.step
+  - Size: 986,301 bytes (963.2 KB)

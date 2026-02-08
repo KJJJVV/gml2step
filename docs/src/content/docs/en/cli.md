@@ -19,6 +19,8 @@ gml2step convert INPUT_GML OUTPUT_STEP [OPTIONS]
 | `--method` | str | `solid` | Conversion method: `solid`, `sew`, `extrude`, `auto` |
 | `--debug` | flag | False | Enable debug logging |
 | `--use-streaming / --no-use-streaming` | flag | True | Use streaming parser for lower memory usage |
+| `--building-id ID` | str (repeatable) | None | Filter by specific building ID(s) |
+| `--filter-attribute` | str | `gml:id` | Attribute to match for building ID filtering |
 
 **Requires pythonocc-core (OpenCASCADE).**
 
@@ -36,6 +38,9 @@ gml2step convert building.gml output.step --limit 50
 
 # Disable streaming (loads entire DOM)
 gml2step convert building.gml output.step --no-use-streaming
+
+# Convert specific buildings only
+gml2step convert building.gml output.step --building-id BLD001 --building-id BLD002
 ```
 
 ---

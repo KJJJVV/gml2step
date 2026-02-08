@@ -19,12 +19,22 @@ app = typer.Typer(add_completion=False, help="CityGML parsing and STEP conversio
 
 @app.command("convert")
 def convert_cmd(
-    input_gml: Path = typer.Argument(..., exists=True, readable=True, help="Input CityGML file"),
+    input_gml: Path = typer.Argument(
+        ..., exists=True, readable=True, help="Input CityGML file"
+    ),
     output_step: Path = typer.Argument(..., help="Output STEP file"),
     limit: Optional[int] = typer.Option(None, help="Maximum number of buildings"),
-    method: str = typer.Option("solid", help="Conversion method: solid|auto|sew|extrude"),
+    method: str = typer.Option(
+        "solid", help="Conversion method: solid|auto|sew|extrude"
+    ),
     debug: bool = typer.Option(False, help="Enable debug logging"),
     use_streaming: bool = typer.Option(True, help="Use streaming parser when possible"),
+    building_id: Optional[List[str]] = typer.Option(
+        None, "--building-id", help="Filter by building ID(s)"
+    ),
+    filter_attribute: str = typer.Option(
+        "gml:id", help="Filter attribute for building ID matching"
+    ),
 ) -> None:
     ok, result = convert_api(
         gml_path=str(input_gml),
@@ -33,6 +43,8 @@ def convert_cmd(
         method=method,
         debug=debug,
         use_streaming=use_streaming,
+        building_ids=building_id,
+        filter_attribute=filter_attribute,
     )
     if not ok:
         typer.echo(f"Conversion failed: {result}", err=True)
@@ -42,7 +54,9 @@ def convert_cmd(
 
 @app.command("parse")
 def parse_cmd(
-    input_gml: Path = typer.Argument(..., exists=True, readable=True, help="Input CityGML file"),
+    input_gml: Path = typer.Argument(
+        ..., exists=True, readable=True, help="Input CityGML file"
+    ),
     limit: Optional[int] = typer.Option(None, help="Limit listed building IDs"),
 ) -> None:
     summary = parse_api(str(input_gml), limit=limit)
@@ -51,9 +65,13 @@ def parse_cmd(
 
 @app.command("stream-parse")
 def stream_parse_cmd(
-    input_gml: Path = typer.Argument(..., exists=True, readable=True, help="Input CityGML file"),
+    input_gml: Path = typer.Argument(
+        ..., exists=True, readable=True, help="Input CityGML file"
+    ),
     limit: Optional[int] = typer.Option(None, help="Maximum number of buildings"),
-    building_id: Optional[List[str]] = typer.Option(None, "--building-id", help="Filter building ID"),
+    building_id: Optional[List[str]] = typer.Option(
+        None, "--building-id", help="Filter building ID"
+    ),
     filter_attribute: str = typer.Option("gml:id", help="Filter attribute"),
 ) -> None:
     count = 0
@@ -64,14 +82,20 @@ def stream_parse_cmd(
         filter_attribute=filter_attribute,
     ):
         count += 1
-        bid = building.get("{http://www.opengis.net/gml}id") or building.get("id") or f"building_{count}"
+        bid = (
+            building.get("{http://www.opengis.net/gml}id")
+            or building.get("id")
+            or f"building_{count}"
+        )
         typer.echo(bid)
     typer.echo(f"total={count}")
 
 
 @app.command("extract-footprints")
 def extract_footprints_cmd(
-    input_gml: Path = typer.Argument(..., exists=True, readable=True, help="Input CityGML file"),
+    input_gml: Path = typer.Argument(
+        ..., exists=True, readable=True, help="Input CityGML file"
+    ),
     output_json: Optional[Path] = typer.Option(None, help="Optional JSON output path"),
     limit: Optional[int] = typer.Option(None, help="Maximum number of buildings"),
     default_height: float = typer.Option(10.0, help="Default height in meters"),
@@ -84,7 +108,9 @@ def extract_footprints_cmd(
     payload = [asdict(fp) for fp in footprints]
 
     if output_json is not None:
-        output_json.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        output_json.write_text(
+            json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
         typer.echo(str(output_json))
         return
 
@@ -93,4 +119,3 @@ def extract_footprints_cmd(
 
 if __name__ == "__main__":
     app()
-

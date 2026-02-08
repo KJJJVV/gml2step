@@ -19,6 +19,8 @@ gml2step convert INPUT_GML OUTPUT_STEP [OPTIONS]
 | `--method` | str | `solid` | 変換方式: `solid`, `sew`, `extrude`, `auto` |
 | `--debug` | flag | False | デバッグログ出力 |
 | `--use-streaming / --no-use-streaming` | flag | True | ストリーミングパーサーを使う |
+| `--building-id ID` | str (複数指定可) | なし | 特定の建物IDでフィルタ |
+| `--filter-attribute` | str | `gml:id` | 建物IDフィルタでマッチする属性 |
 
 **pythonocc-core (OpenCASCADE) が必要です。**
 
@@ -36,6 +38,9 @@ gml2step convert building.gml output.step --limit 50
 
 # ストリーミングを無効化 (DOM 全体を読み込む)
 gml2step convert building.gml output.step --no-use-streaming
+
+# 特定の建物だけ変換
+gml2step convert building.gml output.step --building-id BLD001 --building-id BLD002
 ```
 
 ---
