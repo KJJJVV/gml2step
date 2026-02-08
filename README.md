@@ -1,11 +1,19 @@
 # gml2step
 
+[![CI](https://github.com/Soynyuu/gml2step/actions/workflows/ci.yml/badge.svg)](https://github.com/Soynyuu/gml2step/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/gml2step)](https://pypi.org/project/gml2step/)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![Docs](https://github.com/Soynyuu/gml2step/actions/workflows/deploy-docs.yml/badge.svg)](https://soynyuu.github.io/gml2step/)
+[![CityGML 2.0](https://img.shields.io/badge/CityGML-2.0-green.svg)](https://www.ogc.org/standard/citygml/)
+[![STEP ISO 10303](https://img.shields.io/badge/STEP-ISO_10303--21-green.svg)](https://en.wikipedia.org/wiki/ISO_10303-21)
+[![PLATEAU](https://img.shields.io/badge/PLATEAU-supported-orange.svg)](https://www.mlit.go.jp/plateau/)
 
 **[日本語版 README はこちら (Japanese)](README.ja.md)**
 
 A standalone toolkit for parsing [CityGML](https://www.ogc.org/standard/citygml/) files and converting 3D building geometry to the [STEP](https://en.wikipedia.org/wiki/ISO_10303-21) (ISO 10303-21) CAD format. Originally extracted from [Paper-CAD](https://github.com/Soynyuu/Paper-CAD).
+
+Full documentation: **https://soynyuu.github.io/gml2step/**
 
 ## Table of Contents
 
