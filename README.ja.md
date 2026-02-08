@@ -335,3 +335,4 @@ pytest
 - [PLATEAU](https://www.mlit.go.jp/plateau/) — 国交省 3D 都市モデル
 - [OpenCASCADE](https://www.opencascade.com/) / [pythonocc-core](https://github.com/tpaviot/pythonocc-core) — STEP 変換の CAD カーネル
 - [pyproj](https://pyproj4.github.io/pyproj/) — 座標参照系変換
+- [未踏ジュニア](https://jr.mitou.org/) — 独創的アイデアと卓越した技術を持つ 17 歳以下のクリエータ支援プログラム
