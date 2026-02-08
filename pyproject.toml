@@ -57,3 +57,29 @@ include = ["gml2step*"]
 [tool.setuptools.package-data]
 gml2step = ["data/*.json"]
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+addopts = "-v --tb=short"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "occ: marks tests requiring pythonocc-core (deselect with '-m \"not occ\"')",
+]
+
+[tool.coverage.run]
+source = ["gml2step"]
+omit = [
+    "src/gml2step/citygml/geometry/*",
+    "src/gml2step/citygml/pipeline/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.",
+    "if TYPE_CHECKING:",
+    "except ImportError",
+]
+
