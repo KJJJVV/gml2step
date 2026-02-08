@@ -7,6 +7,22 @@
 
 A standalone toolkit for parsing [CityGML](https://www.ogc.org/standard/citygml/) files and converting 3D building geometry to the [STEP](https://en.wikipedia.org/wiki/ISO_10303-21) (ISO 10303-21) CAD format. Originally extracted from [Paper-CAD](https://github.com/Soynyuu/Paper-CAD).
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [CLI Reference](#cli-reference)
+- [Conversion Methods](#conversion-methods)
+- [Processing Pipeline](#processing-pipeline)
+- [LoD Support](#lod-support)
+- [Streaming Parser](#streaming-parser)
+- [CRS and Coordinate Handling](#crs-and-coordinate-handling)
+- [PLATEAU Integration](#plateau-integration)
+- [Architecture](#architecture)
+- [Development](#development)
+- [License](#license)
+
 ## Overview
 
 gml2step reads CityGML 2.0 files — including large-scale datasets from Japan's [PLATEAU](https://www.mlit.go.jp/plateau/) project — and produces STEP files suitable for CAD/CAM/BIM workflows.
