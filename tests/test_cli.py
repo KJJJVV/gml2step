@@ -4,7 +4,7 @@ import tempfile
 from typer.testing import CliRunner
 
 from gml2step.cli import app
-from tests.conftest import SAMPLE_GML_RICH
+from conftest import SAMPLE_GML_RICH
 
 
 runner = CliRunner()

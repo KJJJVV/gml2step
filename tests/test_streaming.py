@@ -9,7 +9,7 @@ from gml2step.citygml.streaming.parser import (
     estimate_memory_savings,
     stream_parse_buildings,
 )
-from tests.conftest import SAMPLE_GML_RICH
+from conftest import SAMPLE_GML_RICH
 
 
 # ── StreamingConfig ───────────────────────────────────────────
