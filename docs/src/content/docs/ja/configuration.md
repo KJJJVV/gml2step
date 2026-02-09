@@ -31,7 +31,7 @@ export PLATEAU_DATASET_FETCH_CONCURRENCY=16
 
 ## 変換パラメータ
 
-`convert()` に渡すか、CLI フラグで設定します。
+`convert()` に渡して設定します。現行CLIでは `convert()` パラメータの一部（`--method`, `--limit`, `--use-streaming` など）のみを公開しています。
 
 ### 精度モード
 
@@ -94,4 +94,4 @@ Python API で `StreamingConfig` を使って直接設定できます:
 | `filter_attribute` | `gml:id` | ID マッチに使う XML 属性 |
 | `debug` | False | デバッグ出力 |
 | `enable_gc_per_building` | True | 建物ごとに GC を強制 |
-| `max_xlink_cache_size` | 10000 | グローバル XLink LRU キャッシュのエントリ数上限 |
+| `max_xlink_cache_size` | 10000 | 建物単位のローカル XLink インデックスのエントリ数上限 |

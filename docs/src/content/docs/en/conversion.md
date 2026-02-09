@@ -37,7 +37,7 @@ gml2step convert building.gml output.step --method auto
 
 ## Processing pipeline
 
-The `convert` command processes each building through 7 phases:
+The `convert` command processes each building through 8 phases (including Phase 1.5):
 
 ### Phase 0: Recentering
 

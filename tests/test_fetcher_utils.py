@@ -20,7 +20,9 @@ from gml2step.plateau.fetcher import (
     _extract_building_coordinates,
     extract_municipality_code,
     _get_municipality_name_from_code,
+    search_buildings_by_address,
 )
+import gml2step.plateau.fetcher as fetcher_module
 
 # Namespace for building XML fixtures (fetcher.py uses its own NS dict)
 _NS_DECL = (
@@ -261,6 +263,15 @@ class TestExtractBuildingHeight:
         building = ET.fromstring(xml)
         assert _extract_building_height(building) == 30.0
 
+    def test_uro_measured_height_v31(self):
+        xml = """<bldg:Building xmlns:gml="http://www.opengis.net/gml"
+            xmlns:bldg="http://www.opengis.net/citygml/building/2.0"
+            xmlns:uro="https://www.geospatial.jp/iur/uro/3.1">
+            <uro:measuredHeight>31.0</uro:measuredHeight>
+        </bldg:Building>"""
+        building = ET.fromstring(xml)
+        assert _extract_building_height(building) == 31.0
+
     def test_no_height(self):
         xml = f"<bldg:Building {_NS_DECL}></bldg:Building>"
         building = ET.fromstring(xml)
@@ -378,3 +389,50 @@ class TestGetMunicipalityNameFromCode:
 
     def test_unknown_code(self):
         assert _get_municipality_name_from_code("99999") is None
+
+
+def test_search_buildings_by_address_accepts_ranking_mode_alias(monkeypatch):
+    """ranking_mode should be treated as a backward-compatible alias of search_mode."""
+    monkeypatch.setattr(
+        fetcher_module,
+        "geocode_address",
+        lambda query: GeocodingResult(
+            query=query,
+            latitude=35.0,
+            longitude=139.0,
+            display_name="dummy",
+        ),
+    )
+    monkeypatch.setattr(
+        fetcher_module,
+        "fetch_citygml_from_plateau",
+        lambda *args, **kwargs: "<CityModel/>",
+    )
+    monkeypatch.setattr(
+        fetcher_module,
+        "parse_buildings_from_citygml",
+        lambda xml: [
+            BuildingInfo(
+                building_id="ID_1",
+                gml_id="BLD_1",
+                latitude=35.0,
+                longitude=139.0,
+                distance_meters=0.0,
+            )
+        ],
+    )
+
+    captured = {}
+
+    def _fake_rank(buildings, target_latitude, target_longitude, name_query=None, search_mode="hybrid"):
+        captured["search_mode"] = search_mode
+        for b in buildings:
+            b.relevance_score = 1.0
+            b.match_reason = "test"
+        return buildings
+
+    monkeypatch.setattr(fetcher_module, "find_nearest_building", _fake_rank)
+
+    result = search_buildings_by_address("tokyo", ranking_mode="distance", limit=1)
+    assert result["success"] is True
+    assert captured["search_mode"] == "distance"

@@ -21,7 +21,7 @@ src/gml2step/
 │   ├── geometry/            # OCCT ジオメトリ構築、修復
 │   ├── transforms/          # CRS 検出、再投影、リセンタリング
 │   ├── utils/               # XLink、XML パーサー、ログ
-│   └── pipeline/            # 7フェーズ変換パイプライン
+│   └── pipeline/            # 8フェーズ変換パイプライン (Phase 1.5 含む)
 └── plateau/                 # PLATEAU API、ジオコーディング、メッシュ
 ```
 
@@ -41,14 +41,13 @@ src/gml2step/
 
 ### XLink 解決
 
-CityGML では XLink (`xlink:href="#id"`) でジオメトリを共有します。ストリーミングパーサーは2つのキャッシュで対応しています:
+CityGML では XLink (`xlink:href="#id"`) でジオメトリを共有します。現行のストリーミング処理では建物単位で XLink をインデックス化します:
 
-- **ローカルキャッシュ** — 現在の building 内の XLink ターゲット (建物ごとにクリア)
-- **グローバル LRU キャッシュ** — building をまたぐ XLink ターゲット (`max_xlink_cache_size` でサイズ制限、デフォルト 10,000)
+- **建物単位のローカルインデックス** — 現在の building 内の XLink ターゲット (建物ごとにクリア)
 
 ### メモリ特性
 
-ファイルサイズに関係なく O(1棟) のメモリ使用量です。トレードオフとして、現在の建物外の XLink ターゲットが LRU キャッシュから追い出されると再パースが必要になります。
+ファイルサイズに関係なく O(1棟) のメモリ使用量です。
 
 > 正式なベンチマークはまだ取っていません。O(1) のメモリ特性はアーキテクチャ的なもの (一度に1棟だけメモリに載る) ですが、実際のメモリ使用量は建物の複雑さと XLink キャッシュサイズに依存します。
 
@@ -63,7 +62,7 @@ config = StreamingConfig(
     filter_attribute="gml:id",
     debug=False,
     enable_gc_per_building=True,   # 建物ごとに GC を強制
-    max_xlink_cache_size=10000,    # グローバル XLink キャッシュのエントリ数
+    max_xlink_cache_size=10000,    # 建物単位のローカル XLink インデックス上限
 )
 ```
 
@@ -103,7 +102,7 @@ gml2step は全19系の定義を持っていて、緯度経度から適切な系
 
 ## 変換パイプラインの内部
 
-パイプラインの実体は `gml2step.citygml.pipeline` にあります。[変換ガイド](/gml2step/ja/conversion/)で説明した7フェーズを実行します。
+パイプラインの実体は `gml2step.citygml.pipeline` にあります。[変換ガイド](/gml2step/ja/conversion/)で説明した8フェーズ (Phase 1.5 含む) を実行します。
 
 建物は逐次処理されます。各建物について:
 

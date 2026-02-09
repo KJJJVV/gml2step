@@ -23,13 +23,13 @@ description: 国交省 3D 都市モデルからのデータ取得
 ```python
 from gml2step.plateau.fetcher import search_buildings_by_address
 
-buildings = search_buildings_by_address(
+result = search_buildings_by_address(
     "東京都千代田区霞が関3-2-1",
-    ranking_mode="hybrid",
+    search_mode="hybrid",
     limit=10,
 )
-for b in buildings:
-    print(b.building_id, b.name, b.height, b.lod_level)
+for b in result["buildings"]:
+    print(b.building_id, b.name, b.height, b.has_lod2, b.has_lod3)
 ```
 
 ### ランキングモード
@@ -138,7 +138,7 @@ Nominatim の利用ポリシーに従い 1req/sec にレート制限していま
 | `longitude` | float | 経度 |
 | `display_name` | str | Nominatim の表示名 |
 | `osm_type` | str | OSM フィーチャタイプ |
-| `osm_id` | str | OSM フィーチャ ID |
+| `osm_id` | int | OSM フィーチャ ID |
 
 ---
 
@@ -157,10 +157,11 @@ CityGML のダウンロードをローカルにキャッシュできます。
 
 ## メッシュ→市区町村マッピング
 
-2次メッシュコードから市区町村コードへのオフラインマッピング (`mesh2_municipality.json`) を同梱しています。メッシュがどの自治体に属するかを API 呼び出しなしで解決できます。
+メッシュ→市区町村コード解決は、主に `plateau.api_client` の全国向けオフラインJSONで行います。`plateau.mesh_mapping` は東京23区向けのフォールバックです。
 
 ```python
-from gml2step.plateau.mesh_mapping import get_municipality_from_mesh2
+import asyncio
+from gml2step.plateau.api_client import fetch_plateau_datasets_by_mesh
 
-code = get_municipality_from_mesh2("533945")  # -> "13101" (千代田区)
+datasets = asyncio.run(fetch_plateau_datasets_by_mesh("53394525"))  # 内部でオフライン mesh2 マッピングを利用
 ```

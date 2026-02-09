@@ -436,7 +436,7 @@ def export_step_from_citygml(
         # Apply coordinate-based filtering (takes priority)
         if target_latitude is not None and target_longitude is not None:
             original_count = len(bldgs)
-            bldgs = filter_buildings_by_coordinates(
+            bldgs = _filter_buildings_by_coordinates(
                 bldgs, target_latitude, target_longitude, radius_meters, debug
             )
             if debug:
@@ -447,7 +447,7 @@ def export_step_from_citygml(
         # Apply building ID filtering
         elif building_ids:
             original_count = len(bldgs)
-            bldgs = filter_buildings(bldgs, building_ids, filter_attribute)
+            bldgs = _filter_buildings(bldgs, building_ids, filter_attribute)
             if debug:
                 log(f"Building ID filter: {original_count} → {len(bldgs)} buildings")
                 log(f"Filter attribute: {filter_attribute}")

@@ -58,7 +58,7 @@ pytest --cov=gml2step
 | File | Tests | Notes |
 |---|---|---|
 | `tests/test_api.py` | 3 tests | `parse`, `stream_parse`, `extract_footprints` |
-| `tests/test_cli.py` | 2 tests | `parse`, `stream-parse` CLI commands |
+| `tests/test_cli.py` | 7 tests | `parse`, `stream-parse`, `extract-footprints`, `convert` error path |
 
 Tests use inline CityGML fixtures (no external files needed). The `convert` function is not tested in CI because it requires pythonocc-core.
 

@@ -23,13 +23,13 @@ The main entry point. Takes a Japanese address, geocodes it, fetches the surroun
 ```python
 from gml2step.plateau.fetcher import search_buildings_by_address
 
-buildings = search_buildings_by_address(
+result = search_buildings_by_address(
     "東京都千代田区霞が関3-2-1",
-    ranking_mode="hybrid",
+    search_mode="hybrid",
     limit=10,
 )
-for b in buildings:
-    print(b.building_id, b.name, b.height, b.lod_level)
+for b in result["buildings"]:
+    print(b.building_id, b.name, b.height, b.has_lod2, b.has_lod3)
 ```
 
 ### Ranking modes
@@ -138,7 +138,7 @@ Rate-limited to 1 request per second per Nominatim's usage policy.
 | `longitude` | float | Geocoded longitude |
 | `display_name` | str | Nominatim display name |
 | `osm_type` | str | OSM feature type |
-| `osm_id` | str | OSM feature ID |
+| `osm_id` | int | OSM feature ID |
 
 ---
 
@@ -157,10 +157,11 @@ When enabled, downloaded GML files are stored in the cache directory. Subsequent
 
 ## Mesh-to-municipality mapping
 
-gml2step includes an offline JSON file (`mesh2_municipality.json`) that maps 2nd-level mesh codes to municipality codes. This avoids needing extra API calls to resolve which municipality a mesh belongs to.
+gml2step primarily uses a nationwide offline JSON mapping in `plateau.api_client` for mesh-to-municipality resolution. `plateau.mesh_mapping` is kept as a Tokyo-only fallback.
 
 ```python
-from gml2step.plateau.mesh_mapping import get_municipality_from_mesh2
+import asyncio
+from gml2step.plateau.api_client import fetch_plateau_datasets_by_mesh
 
-code = get_municipality_from_mesh2("533945")  # -> "13101" (Chiyoda-ku)
+datasets = asyncio.run(fetch_plateau_datasets_by_mesh("53394525"))  # Uses offline mesh2 mapping internally
 ```

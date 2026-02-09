@@ -21,7 +21,7 @@ src/gml2step/
 │   ├── geometry/            # OCCT geometry builders, shell/solid, repair
 │   ├── transforms/          # CRS detection, reprojection, recentering
 │   ├── utils/               # XLink resolver, XML parser, logging
-│   └── pipeline/            # 7-phase conversion orchestrator
+│   └── pipeline/            # 8-phase conversion orchestrator (includes Phase 1.5)
 └── plateau/                 # PLATEAU API client, geocoding, mesh utils
 ```
 
@@ -41,14 +41,13 @@ For large CityGML files, gml2step provides a SAX-based streaming parser that pro
 
 ### XLink resolution
 
-CityGML files use XLink references (`xlink:href="#id"`) to share geometry between elements. The streaming parser handles this with two caches:
+CityGML files use XLink references (`xlink:href="#id"`) to share geometry between elements. The current streaming path indexes XLink targets within each building:
 
-- **Local cache** — XLink targets within the current building element (cleared after each building)
-- **Global LRU cache** — XLink targets referenced across buildings (bounded by `max_xlink_cache_size`, default 10,000 entries)
+- **Per-building local index** — XLink targets within the current building element (cleared after each building)
 
 ### Memory characteristics
 
-The streaming parser maintains O(1 building) memory usage regardless of file size. The trade-off is that XLink targets outside the current building may need to be re-parsed if they fall out of the LRU cache.
+The streaming parser maintains O(1 building) memory usage regardless of file size.
 
 > The streaming parser has not been formally benchmarked. The O(1) memory characteristic is architectural (one building in memory at a time), but actual memory usage depends on building complexity and XLink cache size.
 
@@ -63,7 +62,7 @@ config = StreamingConfig(
     filter_attribute="gml:id",
     debug=False,
     enable_gc_per_building=True,   # Force GC after each building
-    max_xlink_cache_size=10000,    # Global XLink cache entries
+    max_xlink_cache_size=10000,    # Max entries in per-building local XLink index
 )
 ```
 
@@ -103,7 +102,7 @@ Even with projected coordinates, values like X=140000, Y=36000 (meters) can caus
 
 ## Conversion pipeline internals
 
-The pipeline orchestrator lives in `gml2step.citygml.pipeline`. It coordinates the 7-phase process described in the [Conversion Guide](/gml2step/en/conversion/).
+The pipeline orchestrator lives in `gml2step.citygml.pipeline`. It coordinates the 8-phase process (including Phase 1.5) described in the [Conversion Guide](/gml2step/en/conversion/).
 
 The pipeline processes buildings sequentially. For each building:
 

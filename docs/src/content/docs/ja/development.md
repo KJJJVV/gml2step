@@ -58,7 +58,7 @@ pytest --cov=gml2step
 | ファイル | テスト数 | 内容 |
 |---|---|---|
 | `tests/test_api.py` | 3 | `parse`, `stream_parse`, `extract_footprints` |
-| `tests/test_cli.py` | 2 | `parse`, `stream-parse` CLI コマンド |
+| `tests/test_cli.py` | 7 | `parse`, `stream-parse`, `extract-footprints`, `convert` 失敗系 |
 
 テストはインラインの CityGML フィクスチャを使っています (外部ファイル不要)。`convert` は pythonocc-core が必要なので CI ではテストしていません。
 

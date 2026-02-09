@@ -31,7 +31,7 @@ export PLATEAU_DATASET_FETCH_CONCURRENCY=16
 
 ## Conversion parameters
 
-These are passed programmatically to `convert()` or set via CLI flags.
+These are passed programmatically to `convert()`. The current CLI exposes a subset of `convert()` parameters (`--method`, `--limit`, `--use-streaming`, etc.).
 
 ### Precision modes
 
@@ -94,4 +94,4 @@ Configurable via `StreamingConfig` when using the Python API directly:
 | `filter_attribute` | `gml:id` | XML attribute for ID matching |
 | `debug` | False | Enable debug output |
 | `enable_gc_per_building` | True | Force garbage collection after each building |
-| `max_xlink_cache_size` | 10000 | Max entries in global XLink LRU cache |
+| `max_xlink_cache_size` | 10000 | Max entries in per-building local XLink index |

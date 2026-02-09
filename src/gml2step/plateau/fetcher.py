@@ -48,10 +48,20 @@ NS = {
     "gml": "http://www.opengis.net/gml",
     "bldg": "http://www.opengis.net/citygml/building/2.0",
     "core": "http://www.opengis.net/citygml/2.0",
-    "uro": "http://www.opengis.net/uro/1.0",
+    "uro": "https://www.geospatial.jp/iur/uro/3.1",
     "gen": "http://www.opengis.net/citygml/generics/2.0",
     "xlink": "http://www.w3.org/1999/xlink",
 }
+
+_ALT_NS_URO_1_0 = {**NS, "uro": "http://www.opengis.net/uro/1.0"}
+
+
+def _find_with_uro_fallback(elem: ET.Element, path: str) -> Optional[ET.Element]:
+    """Find element while supporting both uro 3.1 and legacy uro 1.0 namespaces."""
+    found = elem.find(path, NS)
+    if found is not None:
+        return found
+    return elem.find(path, _ALT_NS_URO_1_0)
 
 
 # ============================================================================
@@ -870,13 +880,19 @@ def parse_buildings_from_citygml(
 
         # Try 1: uro:buildingIDAttribute/uro:BuildingIDAttribute/uro:buildingID (PLATEAU standard)
         # Format: <uro:buildingIDAttribute><uro:BuildingIDAttribute><uro:buildingID>13101-bldg-1234</uro:buildingID>...
-        building_id_elem = building_elem.find(".//uro:buildingIDAttribute/uro:BuildingIDAttribute/uro:buildingID", NS)
+        building_id_elem = _find_with_uro_fallback(
+            building_elem,
+            ".//uro:buildingIDAttribute/uro:BuildingIDAttribute/uro:buildingID",
+        )
         if building_id_elem is not None and building_id_elem.text:
             building_id = building_id_elem.text.strip()
 
         # Try 2: uro:buildingDetails/uro:buildingID (alternative location)
         if not building_id:
-            building_id_elem = building_elem.find(".//uro:buildingDetails/uro:buildingID", NS)
+            building_id_elem = _find_with_uro_fallback(
+                building_elem,
+                ".//uro:buildingDetails/uro:buildingID",
+            )
             if building_id_elem is not None and building_id_elem.text:
                 building_id = building_id_elem.text.strip()
 
@@ -907,7 +923,10 @@ def parse_buildings_from_citygml(
         # Extract measured height
         measured_height = None
         for tag in [".//bldg:measuredHeight", ".//uro:measuredHeight"]:
-            elem = building_elem.find(tag, NS)
+            if tag.startswith(".//uro:"):
+                elem = _find_with_uro_fallback(building_elem, tag)
+            else:
+                elem = building_elem.find(tag, NS)
             if elem is not None and elem.text:
                 try:
                     measured_height = float(elem.text)
@@ -923,7 +942,7 @@ def parse_buildings_from_citygml(
             name = name_elem.text.strip()
         # Fall back to uro:buildingName (PLATEAU-specific extension)
         if not name:
-            name_elem = building_elem.find(".//uro:buildingName", NS)
+            name_elem = _find_with_uro_fallback(building_elem, ".//uro:buildingName")
             if name_elem is not None and name_elem.text:
                 name = name_elem.text.strip()
 
@@ -1032,13 +1051,12 @@ def _parse_poslist(elem: ET.Element) -> List[Tuple[float, float, Optional[float]
 def _extract_building_height(building_elem: ET.Element) -> Optional[float]:
     """Extract building height from various tags."""
     tags = [
-        ".//bldg:measuredHeight",
-        ".//uro:measuredHeight",
-        ".//uro:buildingHeight",
+        building_elem.find(".//bldg:measuredHeight", NS),
+        _find_with_uro_fallback(building_elem, ".//uro:measuredHeight"),
+        _find_with_uro_fallback(building_elem, ".//uro:buildingHeight"),
     ]
 
-    for tag in tags:
-        elem = building_elem.find(tag, NS)
+    for elem in tags:
         if elem is not None and elem.text:
             try:
                 height = float(elem.text)
@@ -1307,7 +1325,8 @@ def search_buildings_by_address(
     radius: float = 0.001,
     limit: Optional[int] = None,
     name_filter: Optional[str] = None,
-    search_mode: str = "hybrid"
+    search_mode: str = "hybrid",
+    ranking_mode: Optional[str] = None,
 ) -> Dict[str, Any]:
     """High-level function: Search buildings by address/facility name with smart ranking.
 
@@ -1323,6 +1342,7 @@ def search_buildings_by_address(
         limit: Maximum number of buildings to return
         name_filter: Building name to search for (optional, for name-based ranking)
         search_mode: Ranking strategy - "distance", "name", or "hybrid" (default)
+        ranking_mode: Backward-compatible alias of search_mode
 
     Returns:
         Dictionary with:
@@ -1344,6 +1364,10 @@ def search_buildings_by_address(
         ...     for building in result["buildings"]:
         ...         print(f"{building.building_id}: {building.match_reason}")
     """
+    # Backward-compatible alias for older examples/docs.
+    if ranking_mode is not None:
+        search_mode = ranking_mode
+
     # 渋谷フクラスの特別処理（ハードコーディング）
     if "フクラス" in query or "fukuras" in query.lower():
         print(f"\n{'='*60}")

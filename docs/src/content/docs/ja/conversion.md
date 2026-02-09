@@ -37,7 +37,7 @@ gml2step convert building.gml output.step --method auto
 
 ## 処理パイプライン
 
-`convert` は建物ごとに7つのフェーズを実行します。
+`convert` は建物ごとに8つのフェーズ (Phase 1.5 を含む) を実行します。
 
 ### Phase 0: リセンタリング
 

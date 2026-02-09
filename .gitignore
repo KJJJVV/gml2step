@@ -49,3 +49,4 @@ node_modules/
 # Project-specific
 *.step
 *.stp
+debug_logs/

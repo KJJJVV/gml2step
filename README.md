@@ -23,7 +23,7 @@ gml2step reads CityGML 2.0 files — including large-scale datasets from Japan's
 - **CityGML parsing** with streaming support for files of any size
 - **STEP conversion** via OpenCASCADE with automatic LoD fallback (LoD3 -> LoD2 -> LoD1 -> LoD0)
 - **4 conversion methods**: solid, sew, extrude, and auto (tries all in sequence)
-- **7-phase geometry pipeline** with progressive auto-repair
+- **8-phase geometry pipeline** (including Phase 1.5) with progressive auto-repair
 - **PLATEAU data fetching** via public APIs (MLIT Data Catalog + OSM Nominatim)
 - **Footprint extraction** for 2D analysis without requiring OCCT
 - **CRS auto-detection** with built-in support for all 19 Japan Plane Rectangular CS zones
@@ -170,7 +170,7 @@ Extracts 2D footprints with estimated building heights. Height is derived from `
 
 ## Processing Pipeline
 
-The `convert` command processes each building through 7 phases:
+The `convert` command processes each building through 8 phases (including Phase 1.5):
 
 | Phase | Description |
 |---|---|
@@ -261,13 +261,13 @@ There is no custom backend server. All requests go directly to these public endp
 ```python
 from gml2step.plateau.fetcher import search_buildings_by_address
 
-buildings = search_buildings_by_address(
+result = search_buildings_by_address(
     "東京都千代田区霞が関3-2-1",
-    ranking_mode="hybrid",  # "distance", "name", or "hybrid"
+    search_mode="hybrid",  # "distance", "name", or "hybrid"
     limit=10,
 )
-for b in buildings:
-    print(b.building_id, b.name, b.height, b.lod_level)
+for b in result["buildings"]:
+    print(b.building_id, b.name, b.height, b.has_lod2, b.has_lod3)
 ```
 
 ### Mesh Code Utilities
@@ -304,7 +304,7 @@ result = asyncio.run(fetch_plateau_datasets_by_mesh("53394525"))
 - **Neighboring mesh enumeration** (3x3 grid) for boundary searches
 - **Async batch resolution** of mesh codes with concurrency control
 - **Local CityGML caching** (opt-in via `CITYGML_CACHE_ENABLED` / `CITYGML_CACHE_DIR` env vars)
-- **Offline mesh-to-municipality mapping** included as package data (avoids extra API calls)
+- **Offline mesh-to-municipality mapping** in `plateau.api_client` (nationwide JSON), with Tokyo-only fallback in `plateau.mesh_mapping`
 
 ## Architecture
 
@@ -324,7 +324,7 @@ src/gml2step/
 │   ├── geometry/            # OCCT geometry builders, shell/solid construction, auto-repair
 │   ├── transforms/          # CRS detection, reprojection, recentering
 │   ├── utils/               # XLink resolver, XML parser, logging
-│   └── pipeline/            # Orchestrator (7-phase conversion pipeline)
+│   └── pipeline/            # Orchestrator (8-phase conversion pipeline, incl. Phase 1.5)
 └── plateau/                 # PLATEAU API client, geocoding, mesh utilities, building search
 ```
 
